@@ -1,0 +1,9 @@
+name = "boringbros"
+compatibility_date = "2026-10-10"
+pages_build_output_dir = "dist"
+
+# Cloudflare R2 Bucket Binding for User Sync & Data
+[[r2_buckets]]
+binding = "BORINGBROS_BUCKET"
+bucket_name = "boringbros-data"
+preview_bucket_name = "boringbros-data-preview"
