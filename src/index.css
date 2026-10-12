@@ -1271,4 +1271,41 @@ a:focus-visible, button:focus-visible, input:focus-visible {
   border-top: 1px dashed var(--ln);
 }
 
+/* ========================================================= */
+/* THINKER PASSPORT IMMERSIVE REALISTIC STYLES */
+/* ========================================================= */
+
+.thinker-passport-container {
+  width: 100%;
+}
+
+.passport-field-label {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #71717A;
+  letter-spacing: 0.05em;
+  margin-bottom: 2px;
+}
+
+.passport-field-value {
+  font-size: 13px;
+  font-weight: 800;
+  color: #0B0B0C;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+.passport-stamp-pill:hover {
+  transform: scale(1.04) rotate(0deg) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+@media (max-width: 768px) {
+  .dn-mobile {
+    display: none !important;
+  }
+}
+
 

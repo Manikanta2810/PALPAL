@@ -11,6 +11,7 @@ import { syncToCloud } from './services/cloudSync';
 import { ActivityTracker, updateStreakOnMastery, getActiveStreak } from './components/ActivityTracker';
 import { ConceptSchematic } from './components/ConceptSchematics';
 import { EmailAuthModal } from './components/EmailAuthModal';
+import { ThinkerPassport } from './components/ThinkerPassport';
 import {
   verifyEmailAuth,
   saveAccountToRegistry,
@@ -1466,108 +1467,48 @@ export const App: React.FC = () => {
 
     return (
       <>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 }}>
-          <h1>Thinker Passport</h1>
-          <button className="bt" onClick={() => setIsEditingProfile(true)}>Edit Profile</button>
-        </div>
-        <p className="mu">Your identity, daily rhythm, and cognitive trajectory on BoringBros.</p>
-
-        {/* Passport Card */}
-        <div className="panel" style={{ marginTop: 20 }}>
-          <div style={{ display: 'flex', gap: 18, alignItems: 'center', borderBottom: '1px solid var(--ln)', paddingBottom: 18 }}>
-            <div style={{ fontSize: 52, background: 'var(--bg)', borderRadius: 20, width: 84, height: 84, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid var(--ink)', flex: 'none' }}>
-              {state.user.avatar || '🚀'}
-            </div>
-            <div>
-              <div style={{ fontSize: 28, fontWeight: 800 }}>{state.user.n}</div>
-              <div style={{ color: 'var(--ac)', fontWeight: 800, fontSize: 18 }}>@{state.user.u}</div>
-              <div className="m mu" style={{ marginTop: 4 }}>
-                {state.user.archetype || 'The Founder'} {state.user.age ? `· Age ${state.user.age}` : ''}
-              </div>
-            </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8, flexWrap: 'wrap', gap: 10 }}>
+          <div>
+            <h1 style={{ margin: 0 }}>Thinker Passport</h1>
+            <p className="mu" style={{ margin: '4px 0 0' }}>Official biometric credential and cognitive mastery record.</p>
           </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginTop: 18 }}>
-            <div>
-              <div className="m mu">Primary Goal</div>
-              <div style={{ fontWeight: 800, fontSize: 16, marginTop: 4 }}>{state.user.goal || 'Building a Startup'}</div>
-            </div>
-            <div>
-              <div className="m mu">Daily Target</div>
-              <div style={{ fontWeight: 800, fontSize: 16, marginTop: 4 }}>{state.user.target || '3 concepts / day'}</div>
-            </div>
-          </div>
-
-          <div style={{ marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--ln)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10 }}>
-            <div>
-              <div className="m mu">Registered Email</div>
-              <div style={{ fontSize: 15, marginTop: 2, display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span>{state.user.e || 'Guest Account (No email attached)'}</span>
-                {state.user.e && (
-                  <span style={{ fontSize: 10, background: '#10B981', color: '#FFF', padding: '2px 8px', borderRadius: 99, fontWeight: 800, fontFamily: 'IBM Plex Mono' }}>
-                    ✓ VERIFIED
-                  </span>
-                )}
-              </div>
-            </div>
-            {!state.user.e ? (
-              <button
-                type="button"
-                className="bt"
-                style={{ fontSize: 12, padding: '6px 12px' }}
-                onClick={() => {
-                  setAuthModalMode('signup');
-                  setIsAuthModalOpen(true);
-                }}
-              >
-                + Connect Verified Email
-              </button>
-            ) : (
-              <button
-                type="button"
-                className="bt"
-                style={{ fontSize: 12, padding: '6px 12px' }}
-                onClick={() => {
-                  setAuthModalMode('signin');
-                  setIsAuthModalOpen(true);
-                }}
-              >
-                Switch Account
-              </button>
-            )}
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button className="bt" onClick={() => setIsEditingProfile(true)}>Edit Profile</button>
           </div>
         </div>
 
-        {/* Quick Stats Grid */}
-        <div className="tiles" style={{ marginTop: 14 }}>
-          <div className="panel" style={{ margin: 0 }}>
-            <div className="m mu">Concepts Mastered</div>
-            <div className="stat">{masteredCount}</div>
-          </div>
-          <div className="panel" style={{ margin: 0 }}>
-            <div className="m mu">Mastery Rate</div>
-            <div className="stat">{state.ans ? Math.round((state.ok / state.ans) * 100) + '%' : '0%'}</div>
-          </div>
-          <div className="panel" style={{ margin: 0 }}>
-            <div className="m mu">Current Streak</div>
-            <div className="stat" style={{ color: getActiveStreak(state.streak, state.lastActiveDate) > 0 ? 'var(--ac-text)' : 'inherit' }}>
-              {getActiveStreak(state.streak, state.lastActiveDate) > 0 ? `🔥 ${getActiveStreak(state.streak, state.lastActiveDate)}d` : '0d'}
-            </div>
-          </div>
-          <div className="panel" style={{ margin: 0 }}>
-            <div className="m mu">Best Streak</div>
-            <div className="stat">{Math.max(state.bestStreak || 0, getActiveStreak(state.streak, state.lastActiveDate))}d</div>
-          </div>
-        </div>
+        {/* Physical Biometric Passport Booklet */}
+        <ThinkerPassport
+          user={state.user}
+          masteredCount={masteredCount}
+          totalConcepts={visibleIdeas.length}
+          streak={getActiveStreak(state.streak, state.lastActiveDate)}
+          bestStreak={Math.max(state.bestStreak || 0, getActiveStreak(state.streak, state.lastActiveDate))}
+          books={ALL_BOOKS}
+          doneMap={state.done}
+          onEditProfile={() => setIsEditingProfile(true)}
+          onSignOut={handleSignOut}
+          onSwitchAccount={() => {
+            setAuthModalMode('signin');
+            setIsAuthModalOpen(true);
+          }}
+          onConnectEmail={() => {
+            setAuthModalMode('signup');
+            setIsAuthModalOpen(true);
+          }}
+        />
 
         {/* Activity & Streak Tracker */}
-        <ActivityTracker
-          streak={state.streak}
-          bestStreak={state.bestStreak}
-          lastActiveDate={state.lastActiveDate}
-          history={state.history}
-          target={state.user?.target}
-        />
+        <div style={{ marginTop: 24 }}>
+          <h2 style={{ fontSize: 18, marginBottom: 12 }}>Daily Rhythm &amp; Momentum</h2>
+          <ActivityTracker
+            streak={state.streak}
+            bestStreak={state.bestStreak}
+            lastActiveDate={state.lastActiveDate}
+            history={state.history}
+            target={state.user?.target}
+          />
+        </div>
 
         <div className="btns" style={{ marginTop: 24 }}>
           <Link className="bt dk" to="/dashboard">Go to Dashboard</Link>
